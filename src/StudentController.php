@@ -3,15 +3,13 @@ require_once 'Student.php';
 
 class StudentController
 {
-    public static function handleRequest($method, $path)
+    public static function handleRequest($method, $pathParts)
     {
-// Split de URL op basis van '/'
-        $parts = explode('/', trim($path, '/'));
-        if ($parts[0] === 'students') {
+        if ($pathParts[0] === 'students') {
             switch ($method) {
                 case 'GET':
-                    if (isset($parts[1])) {
-                        self::getStudent($parts[1]);
+                    if (isset($pathParts[1])) {
+                        self::getStudent($pathParts[1]);
                     } else {
                         self::getAllStudents();
                     }
@@ -20,13 +18,13 @@ class StudentController
                     self::addStudent();
                     break;
                 case 'PUT':
-                    if (isset($parts[1])) {
-                        self::updateStudent($parts[1]);
+                    if (isset($pathParts[1])) {
+                        self::updateStudent($pathParts[1]);
                     }
                     break;
                 case 'DELETE':
-                    if (isset($parts[1])) {
-                        self::deleteStudent($parts[1]);
+                    if (isset($pathParts[1])) {
+                        self::deleteStudent($pathParts[1]);
                     }
                     break;
                 default:
