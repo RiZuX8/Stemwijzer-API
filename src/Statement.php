@@ -8,6 +8,7 @@ class Statement
     public $image;
     public $xValue;
     public $yValue;
+    public $priority;
 
     private $conn;
     private $table = "statements";
