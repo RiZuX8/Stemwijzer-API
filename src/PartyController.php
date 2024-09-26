@@ -129,9 +129,9 @@ class PartyController
         }
     }
 
-    private static function validatePartyInput($input)
+    private static function validatePartyInput($input): bool
     {
-        return isset($input['name']) && !empty($input['name']) &&
+        return !empty($input['name']) &&
                isset($input['image']);
     }
 

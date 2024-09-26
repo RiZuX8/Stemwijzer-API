@@ -137,9 +137,9 @@ class StatementController
         }
     }
 
-    private static function validateStatementInput($input)
+    private static function validateStatementInput($input): bool
     {
-        return isset($input['name']) && !empty($input['name']) &&
+        return !empty($input['name']) &&
                isset($input['description']) &&
                isset($input['image']) &&
                isset($input['xValue']) && is_numeric($input['xValue']) &&
