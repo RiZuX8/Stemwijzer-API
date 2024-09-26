@@ -18,6 +18,9 @@ if ($controller === 'statements') {
 } else if ($controller === 'parties') {
     require_once '../src/PartyController.php';
     PartyController::handleRequest($method, $pathParts);
+} else if ($controller === 'parties-statements') {
+    require_once '../src/PartyStatementController.php';
+    PartyStatementController::handleRequest($method, $pathParts);
 
 } else {
     header("Content-Type: application/json");
