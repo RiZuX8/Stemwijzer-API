@@ -1,0 +1,38 @@
+Statement
+GET /statements | Haal alle statements op.
+GET /statements/{id} | Haal een specifiek statement op.
+POST /statements | Voeg een nieuw statement toe.
+PUT /statements/{id} | Werk een bestaand statement bij.
+DELETE /statements/{id} | Verwijder een statement.
+
+Party
+GET /parties | Haal alle partijen op.
+GET /parties/{id} | Haal een specifieke partij op.
+POST /parties | Voeg een nieuwe partij toe.
+PUT /parties/{id} | Werk een bestaande partij bij.
+DELETE /parties/{id} | Verwijder een partij.
+
+PartyStatement
+GET /party-statements | Haal alle partij-uitspraken op.
+GET /party-statements/party/{partyId} | Haal uitspraken van een specifieke partij op.
+GET /party-statements/statement/{statementId} | Haal uitspraken van een specifiek statement op.
+GET /party-statements/{id} | Haal een specifieke partij-uitspraak op.
+POST /party-statements | Voeg een nieuwe partij-uitspraak toe.
+PUT /party-statements/{id} | Werk een bestaande partij-uitspraak bij.
+DELETE /party-statements/{id} | Verwijder een partij-uitspraak.
+
+Admin
+GET /admins | Haal alle admins op.
+GET /admins/{id} | Haal een specifieke admin op.
+POST /admins | Voeg een nieuwe admin toe.
+POST /admins/login | Log in als admin.
+PUT /admins/{id} | Werk een bestaande admin bij.
+DELETE /admins/{id} | Verwijder een admin.
+
+SuperAdmin
+GET /superadmins | Haal alle superadmins op.
+GET /superadmins/{id} | Haal een specifieke superadmin op.
+POST /superadmins | Voeg een nieuwe superadmin toe.
+POST /superadmins/login | Log in als superadmin.
+PUT /superadmins/{id} | Werk een bestaande superadmin bij.
+DELETE /superadmins/{id} | Verwijder een superadmin.
