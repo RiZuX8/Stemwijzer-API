@@ -9,23 +9,23 @@ class db
 
     function __construct()
     {
-        $this->getConnection();
+        $this->conn = $this->getConnection();
     }
 
     public function getConnection()
     {
         static $mycon;
-        $this->conn = $mycon;
-        if (!isset($this->conn)) {
+        if (!isset($mycon)) {
             try {
                 $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->db_name;
-                $this->conn = new PDO($dsn, $this->username, $this->password);
-                // Set PDO error mode to exception
-                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $mycon = new PDO($dsn, $this->username, $this->password);
+                $mycon->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $exception) {
+                error_log("Connection error: " . $exception->getMessage());
                 echo "Connection error: " . $exception->getMessage();
             }
         }
-        return $this->conn;
+        return $mycon;
     }
 }
+?>
