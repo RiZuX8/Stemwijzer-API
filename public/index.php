@@ -21,6 +21,12 @@ if ($controller === 'statements') {
 } else if ($controller === 'parties-statements') {
     require_once '../src/PartyStatementController.php';
     PartyStatementController::handleRequest($method, $pathParts);
+} else if ($controller === 'admins') {
+    require_once '../src/AdminController.php';
+    AdminController::handleRequest($method, $pathParts);
+} else if ($controller === 'superAdmins') {
+    require_once '../src/SuperAdminController.php';
+    SuperAdminController::handleRequest($method, $pathParts);
 
 } else {
     header("Content-Type: application/json");
