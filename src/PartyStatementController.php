@@ -10,6 +10,11 @@ class PartyStatementController
     {
         self::$db = new db();
 
+        if (self::$db->conn === null) {
+            self::sendResponse(500, ["message" => "Failed to connect to the database"]);
+            return;
+        }
+
         if ($pathParts[0] === 'party-statements') {
             switch ($method) {
                 case 'GET':
