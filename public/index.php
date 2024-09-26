@@ -12,12 +12,13 @@ foreach ($pathParts as $key => $part) {
 
 $controller = $pathParts[0];
 
-if ($controller === 'students') {
-    require_once '../src/StudentController.php';
-    StudentController::handleRequest($method, $pathParts);
-} else if ($controller === 'statements') {
+if ($controller === 'statements') {
     require_once '../src/StatementController.php';
     StatementController::handleRequest($method, $pathParts);
+} else if ($controller === 'parties') {
+    require_once '../src/PartyController.php';
+    PartyController::handleRequest($method, $pathParts);
+
 } else {
     header("Content-Type: application/json");
     http_response_code(404);
