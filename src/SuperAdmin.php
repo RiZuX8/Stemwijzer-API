@@ -3,7 +3,7 @@
 class SuperAdmin
 {
     private $conn;
-    private $table = 'superAdmins';
+    private $table = 'sw_superAdmins';
 
     public $superAdminID;
     public $email;

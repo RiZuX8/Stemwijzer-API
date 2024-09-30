@@ -3,7 +3,7 @@
 class PartyStatement
 {
     private $conn;
-    private $table = 'parties_statements';
+    private $table = 'sw_parties_statements';
 
     public $partyID;
     public $statementID;

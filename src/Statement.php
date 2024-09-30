@@ -3,7 +3,7 @@
 class Statement
 {
     private $conn;
-    private $table = 'statements';
+    private $table = 'sw_statements';
 
     public $statementID;
     public $name;
