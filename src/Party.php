@@ -3,7 +3,7 @@
 class Party
 {
     private $conn;
-    private $table = 'parties';
+    private $table = 'sw_parties';
 
     public $partyID;
     public $name;

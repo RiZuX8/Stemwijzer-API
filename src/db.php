@@ -2,10 +2,10 @@
 class db
 {
     public $conn;
-    private $host = "576459.klas4s22.mid-ica.nl";
-    private $db_name = "klas4s22_576459";
-    private $username = "klas4s22_576459";
-    private $password = "0yiNAPaW";
+    private $host = "ohzoomer.nl";
+    private $db_name = "ohzoomer_school";
+    private $username = "ohzoomer_school";
+    private $password = "u2wohstCY";
 
     function __construct()
     {

@@ -3,7 +3,7 @@
 class Admin
 {
     private $conn;
-    private $table = 'admins';
+    private $table = 'sw_admins';
 
     public $adminID;
     public $partyID;
