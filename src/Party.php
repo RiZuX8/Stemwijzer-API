@@ -7,6 +7,7 @@ class Party
 
     public $partyID;
     public $name;
+    public $description;
     public $image;
 
     public function __construct(PDO $db)
@@ -33,13 +34,15 @@ class Party
 
     public function add()
     {
-        $query = "INSERT INTO " . $this->table . " (name, image) VALUES (:name, :image)";
+        $query = "INSERT INTO " . $this->table . " (name, description, image) VALUES (:name, :description, :image)";
         $stmt = $this->conn->prepare($query);
 
         $this->name = htmlspecialchars(strip_tags($this->name));
+        $this->description = htmlspecialchars(strip_tags($this->description));
         $this->image = htmlspecialchars(strip_tags($this->image));
 
         $stmt->bindParam(":name", $this->name);
+        $stmt->bindParam(":description", $this->description);
         $stmt->bindParam(":image", $this->image);
 
         if ($stmt->execute()) {
@@ -51,15 +54,17 @@ class Party
 
     public function update()
     {
-        $query = "UPDATE " . $this->table . " SET name = :name, image = :image WHERE partyID = :id";
+        $query = "UPDATE " . $this->table . " SET name = :name, description = :description, image = :image WHERE partyID = :id";
         $stmt = $this->conn->prepare($query);
 
         $this->partyID = htmlspecialchars(strip_tags($this->partyID));
         $this->name = htmlspecialchars(strip_tags($this->name));
+        $this->description = htmlspecialchars(strip_tags($this->description));
         $this->image = htmlspecialchars(strip_tags($this->image));
 
         $stmt->bindParam(":id", $this->partyID);
         $stmt->bindParam(":name", $this->name);
+        $stmt->bindParam(":description", $this->description);
         $stmt->bindParam(":image", $this->image);
 
         if ($stmt->execute()) {

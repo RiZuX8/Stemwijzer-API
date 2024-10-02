@@ -79,6 +79,7 @@ class PartyController
             try {
                 $party = new Party(self::$db->conn);
                 $party->name = $input['name'];
+                $party->description = $input['description'];
                 $party->image = $input['image'];
 
                 if ($party->add()) {
@@ -105,6 +106,7 @@ class PartyController
                 $party = new Party(self::$db->conn);
                 $party->partyID = $id;
                 $party->name = $input['name'];
+                $party->description = $input['description'];
                 $party->image = $input['image'];
 
                 if ($party->update()) {
@@ -136,7 +138,7 @@ class PartyController
 
     private static function validatePartyInput($input): bool
     {
-        return !empty($input['name']) &&
+        return !empty($input['name']) && !empty($input['description']) &&
                isset($input['image']);
     }
 
