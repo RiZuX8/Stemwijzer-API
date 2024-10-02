@@ -8,7 +8,6 @@ class Statement
     public $statementID;
     public $name;
     public $description;
-    public $image;
     public $xValue;
     public $yValue;
     public $priority;
@@ -38,22 +37,20 @@ class Statement
     public function add()
     {
         $query = "INSERT INTO " . $this->table . " 
-                  (name, description, image, xValue, yValue, priority) 
+                  (name, description, xValue, yValue, priority) 
                   VALUES 
-                  (:name, :description, :image, :xValue, :yValue, :priority)";
+                  (:name, :description, :xValue, :yValue, :priority)";
 
         $stmt = $this->conn->prepare($query);
 
         $this->name = htmlspecialchars(strip_tags($this->name));
         $this->description = htmlspecialchars(strip_tags($this->description));
-        $this->image = htmlspecialchars(strip_tags($this->image));
         $this->xValue = htmlspecialchars(strip_tags($this->xValue));
         $this->yValue = htmlspecialchars(strip_tags($this->yValue));
         $this->priority = htmlspecialchars(strip_tags($this->priority));
 
         $stmt->bindParam(":name", $this->name);
         $stmt->bindParam(":description", $this->description);
-        $stmt->bindParam(":image", $this->image);
         $stmt->bindParam(":xValue", $this->xValue);
         $stmt->bindParam(":yValue", $this->yValue);
         $stmt->bindParam(":priority", $this->priority);
@@ -68,7 +65,7 @@ class Statement
     public function update()
     {
         $query = "UPDATE " . $this->table . " 
-                  SET name = :name, description = :description, image = :image, 
+                  SET name = :name, description = :description, 
                       xValue = :xValue, yValue = :yValue, priority = :priority 
                   WHERE statementID = :id";
 
@@ -77,7 +74,6 @@ class Statement
         $this->statementID = htmlspecialchars(strip_tags($this->statementID));
         $this->name = htmlspecialchars(strip_tags($this->name));
         $this->description = htmlspecialchars(strip_tags($this->description));
-        $this->image = htmlspecialchars(strip_tags($this->image));
         $this->xValue = htmlspecialchars(strip_tags($this->xValue));
         $this->yValue = htmlspecialchars(strip_tags($this->yValue));
         $this->priority = htmlspecialchars(strip_tags($this->priority));
@@ -85,7 +81,6 @@ class Statement
         $stmt->bindParam(":id", $this->statementID);
         $stmt->bindParam(":name", $this->name);
         $stmt->bindParam(":description", $this->description);
-        $stmt->bindParam(":image", $this->image);
         $stmt->bindParam(":xValue", $this->xValue);
         $stmt->bindParam(":yValue", $this->yValue);
         $stmt->bindParam(":priority", $this->priority);
