@@ -80,7 +80,6 @@ class StatementController
                 $statement = new Statement(self::$db->conn);
                 $statement->name = $input['name'];
                 $statement->description = $input['description'];
-                $statement->image = $input['image'];
                 $statement->xValue = $input['xValue'];
                 $statement->yValue = $input['yValue'];
                 $statement->priority = $input['priority'];
@@ -110,7 +109,6 @@ class StatementController
                 $statement->statementID = $id;
                 $statement->name = $input['name'];
                 $statement->description = $input['description'];
-                $statement->image = $input['image'];
                 $statement->xValue = $input['xValue'];
                 $statement->yValue = $input['yValue'];
                 $statement->priority = $input['priority'];
@@ -146,7 +144,6 @@ class StatementController
     {
         return !empty($input['name']) &&
                isset($input['description']) &&
-               isset($input['image']) &&
                isset($input['xValue']) && is_numeric($input['xValue']) &&
                isset($input['yValue']) && is_numeric($input['yValue']) &&
                isset($input['priority']) && is_numeric($input['priority']);
