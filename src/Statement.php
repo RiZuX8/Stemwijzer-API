@@ -44,7 +44,6 @@ class Statement
 
         $stmt = $this->conn->prepare($query);
 
-        // Sanitize inputs
         $this->name = htmlspecialchars(strip_tags($this->name));
         $this->description = htmlspecialchars(strip_tags($this->description));
         $this->image = htmlspecialchars(strip_tags($this->image));
@@ -52,7 +51,6 @@ class Statement
         $this->yValue = htmlspecialchars(strip_tags($this->yValue));
         $this->priority = htmlspecialchars(strip_tags($this->priority));
 
-        // Bind parameters
         $stmt->bindParam(":name", $this->name);
         $stmt->bindParam(":description", $this->description);
         $stmt->bindParam(":image", $this->image);
@@ -76,7 +74,6 @@ class Statement
 
         $stmt = $this->conn->prepare($query);
 
-        // Sanitize inputs
         $this->statementID = htmlspecialchars(strip_tags($this->statementID));
         $this->name = htmlspecialchars(strip_tags($this->name));
         $this->description = htmlspecialchars(strip_tags($this->description));
@@ -85,7 +82,6 @@ class Statement
         $this->yValue = htmlspecialchars(strip_tags($this->yValue));
         $this->priority = htmlspecialchars(strip_tags($this->priority));
 
-        // Bind parameters
         $stmt->bindParam(":id", $this->statementID);
         $stmt->bindParam(":name", $this->name);
         $stmt->bindParam(":description", $this->description);

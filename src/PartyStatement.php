@@ -45,12 +45,10 @@ class PartyStatement
         $query = "INSERT INTO " . $this->table . " (partyID, statementID, answerValue) VALUES (:partyID, :statementID, :answerValue)";
         $stmt = $this->conn->prepare($query);
 
-        // Sanitize inputs
         $this->partyID = htmlspecialchars(strip_tags($this->partyID));
         $this->statementID = htmlspecialchars(strip_tags($this->statementID));
         $this->answerValue = htmlspecialchars(strip_tags($this->answerValue));
 
-        // Bind parameters
         $stmt->bindParam(":partyID", $this->partyID);
         $stmt->bindParam(":statementID", $this->statementID);
         $stmt->bindParam(":answerValue", $this->answerValue);
@@ -66,12 +64,10 @@ class PartyStatement
         $query = "UPDATE " . $this->table . " SET answerValue = :answerValue WHERE partyID = :partyID AND statementID = :statementID";
         $stmt = $this->conn->prepare($query);
 
-        // Sanitize inputs
         $this->partyID = htmlspecialchars(strip_tags($this->partyID));
         $this->statementID = htmlspecialchars(strip_tags($this->statementID));
         $this->answerValue = htmlspecialchars(strip_tags($this->answerValue));
 
-        // Bind parameters
         $stmt->bindParam(":partyID", $this->partyID);
         $stmt->bindParam(":statementID", $this->statementID);
         $stmt->bindParam(":answerValue", $this->answerValue);
@@ -87,11 +83,9 @@ class PartyStatement
         $query = "DELETE FROM " . $this->table . " WHERE partyID = :partyID AND statementID = :statementID";
         $stmt = $this->conn->prepare($query);
 
-        // Sanitize inputs
         $this->partyID = htmlspecialchars(strip_tags($this->partyID));
         $this->statementID = htmlspecialchars(strip_tags($this->statementID));
 
-        // Bind parameters
         $stmt->bindParam(":partyID", $this->partyID);
         $stmt->bindParam(":statementID", $this->statementID);
 

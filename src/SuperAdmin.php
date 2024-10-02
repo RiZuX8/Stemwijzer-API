@@ -36,11 +36,9 @@ class SuperAdmin
         $query = "INSERT INTO " . $this->table . " (email, password) VALUES (:email, :password)";
         $stmt = $this->conn->prepare($query);
 
-        // Sanitize inputs
         $this->email = htmlspecialchars(strip_tags($this->email));
         $this->password = password_hash($this->password, PASSWORD_DEFAULT); // Hash the password
 
-        // Bind parameters
         $stmt->bindParam(":email", $this->email);
         $stmt->bindParam(":password", $this->password);
 
@@ -56,11 +54,9 @@ class SuperAdmin
         $query = "UPDATE " . $this->table . " SET email = :email WHERE superAdminID = :id";
         $stmt = $this->conn->prepare($query);
 
-        // Sanitize inputs
         $this->superAdminID = htmlspecialchars(strip_tags($this->superAdminID));
         $this->email = htmlspecialchars(strip_tags($this->email));
 
-        // Bind parameters
         $stmt->bindParam(":id", $this->superAdminID);
         $stmt->bindParam(":email", $this->email);
 
