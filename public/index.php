@@ -1,5 +1,4 @@
 <?php
-// Haal het HTTP-verzoek op (method en path)
 $method = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
 $path = parse_url($uri, PHP_URL_PATH);
