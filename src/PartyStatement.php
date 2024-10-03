@@ -19,16 +19,40 @@ class PartyStatement
         $query = "SELECT * FROM " . $this->table;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $partyStatements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($partyStatements) {
+            return [
+                'status' => 200,
+                'data' => $partyStatements
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'PartyStatements not found'
+            ];
+        }
     }
 
-    public function getBypartyID($partyID)
+    public function getByPartyId($partyID)
     {
         $query = "SELECT * FROM " . $this->table . " WHERE partyID = :partyID";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":partyID", $partyID);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $partyStatements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($partyStatements) {
+            return [
+                'status' => 200,
+                'data' => $partyStatements
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'PartyStatements not found'
+            ];
+        }
     }
 
     public function getByStatementId($statementId)
@@ -37,7 +61,19 @@ class PartyStatement
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":statementId", $statementId);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $partyStatements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($partyStatements) {
+            return [
+                'status' => 200,
+                'data' => $partyStatements
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'PartyStatements not found'
+            ];
+        }
     }
 
     public function add()
@@ -54,9 +90,15 @@ class PartyStatement
         $stmt->bindParam(":answerValue", $this->answerValue);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 201,
+                'message' => 'PartyStatement created'
+            ];
         }
-        return false;
+        return [
+            'status' => 500,
+            'message' => 'Failed to create PartyStatement'
+        ];
     }
 
     public function update()
@@ -73,9 +115,15 @@ class PartyStatement
         $stmt->bindParam(":answerValue", $this->answerValue);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 200,
+                'message' => 'PartyStatement updated'
+            ];
         }
-        return false;
+        return [
+            'status' => 404,
+            'message' => 'PartyStatement not found or not updated'
+        ];
     }
 
     public function delete()
@@ -90,8 +138,14 @@ class PartyStatement
         $stmt->bindParam(":statementID", $this->statementID);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 204,
+                'message' => 'PartyStatement deleted'
+            ];
         }
-        return false;
+        return [
+            'status' => 404,
+            'message' => 'PartyStatement not found'
+        ];
     }
 }

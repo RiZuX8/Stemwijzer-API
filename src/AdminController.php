@@ -145,7 +145,7 @@ class AdminController
         if (isset($input['email']) && isset($input['password'])) {
             try {
                 $admin = new Admin(self::$db->conn);
-                $result = $admin->checkPassword($input['email'], $input['password']);
+                $result = $admin->login($input['email'], $input['password']);
                 if ($result) {
                     self::sendResponse(200, [
                         "message" => "Login successful",
