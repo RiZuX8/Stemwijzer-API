@@ -19,7 +19,19 @@ class SuperAdmin
         $query = "SELECT superAdminID, email FROM " . $this->table;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $superAdmins = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($superAdmins) {
+            return [
+                'status' => 200,
+                'data' => $superAdmins
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'No SuperAdmins found'
+            ];
+        }
     }
 
     public function getById($id)
@@ -28,7 +40,19 @@ class SuperAdmin
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id", $id);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $superAdmin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($superAdmin) {
+            return [
+                'status' => 200,
+                'data' => $superAdmin
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'SuperAdmin not found'
+            ];
+        }
     }
 
     public function add()
@@ -37,16 +61,23 @@ class SuperAdmin
         $stmt = $this->conn->prepare($query);
 
         $this->email = htmlspecialchars(strip_tags($this->email));
-        $this->password = password_hash($this->password, PASSWORD_DEFAULT); // Hash the password
+        $this->password = password_hash($this->password, PASSWORD_DEFAULT);
 
         $stmt->bindParam(":email", $this->email);
         $stmt->bindParam(":password", $this->password);
 
         if ($stmt->execute()) {
             $this->superAdminID = $this->conn->lastInsertId();
-            return true;
+            return [
+                'status' => 201,
+                'message' => 'SuperAdmin created',
+                'id' => $this->superAdminID
+            ];
         }
-        return false;
+        return [
+            'status' => 500,
+            'message' => 'Failed to create SuperAdmin'
+        ];
     }
 
     public function update()
@@ -61,9 +92,15 @@ class SuperAdmin
         $stmt->bindParam(":email", $this->email);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 200,
+                'message' => 'SuperAdmin updated'
+            ];
         }
-        return false;
+        return [
+            'status' => 404,
+            'message' => 'SuperAdmin not found or not updated'
+        ];
     }
 
     public function delete($id)
@@ -73,9 +110,15 @@ class SuperAdmin
         $stmt->bindParam(":id", $id);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 204,
+                'message' => 'SuperAdmin deleted'
+            ];
         }
-        return false;
+        return [
+            'status' => 404,
+            'message' => 'SuperAdmin not found'
+        ];
     }
 
     public function updatePassword($id, $newPassword)
@@ -89,12 +132,18 @@ class SuperAdmin
         $stmt->bindParam(":password", $hashedPassword);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 200,
+                'message' => 'Password updated'
+            ];
         }
-        return false;
+        return [
+            'status' => 404,
+            'message' => 'SuperAdmin not found or password not updated'
+        ];
     }
 
-    public function checkPassword($email, $password)
+    public function login($email, $password)
     {
         $query = "SELECT * FROM " . $this->table . " WHERE email = :email";
         $stmt = $this->conn->prepare($query);
@@ -104,9 +153,19 @@ class SuperAdmin
         $superAdmin = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($superAdmin && password_verify($password, $superAdmin['password'])) {
-            return $superAdmin;
+            return [
+                'status' => 200,
+                'message' => 'Login successful',
+                'superAdmin' => [
+                    'id' => $superAdmin['superAdminID'],
+                    'email' => $superAdmin['email']
+                ]
+            ];
         }
 
-        return false;
+        return [
+            'status' => 401,
+            'message' => 'Invalid credentials'
+        ];
     }
 }

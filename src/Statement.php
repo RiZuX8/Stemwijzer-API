@@ -22,7 +22,19 @@ class Statement
         $query = "SELECT * FROM " . $this->table;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $statements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($statements) {
+            return [
+                'status' => 200,
+                'data' => $statements
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'No statements found'
+            ];
+        }
     }
 
     public function getById($id)
@@ -31,7 +43,19 @@ class Statement
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id", $id);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $statement = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($statement) {
+            return [
+                'status' => 200,
+                'data' => $statement
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'Statement not found'
+            ];
+        }
     }
 
     public function add()
@@ -57,9 +81,16 @@ class Statement
 
         if ($stmt->execute()) {
             $this->statementID = $this->conn->lastInsertId();
-            return true;
+            return [
+                'status' => 201,
+                'message' => 'Statement created',
+                'id' => $this->statementID
+            ];
         }
-        return false;
+        return [
+            'status' => 500,
+            'message' => 'Failed to create statement'
+        ];
     }
 
     public function update()
@@ -86,9 +117,15 @@ class Statement
         $stmt->bindParam(":priority", $this->priority);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 200,
+                'message' => 'Statement updated'
+            ];
         }
-        return false;
+        return [
+            'status' => 404,
+            'message' => 'Statement not found or not updated'
+        ];
     }
 
     public function delete($id)
@@ -98,8 +135,14 @@ class Statement
         $stmt->bindParam(":id", $id);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 204,
+                'message' => 'Statement deleted'
+            ];
         }
-        return false;
+        return [
+            'status' => 404,
+            'message' => 'Statement not found'
+        ];
     }
 }

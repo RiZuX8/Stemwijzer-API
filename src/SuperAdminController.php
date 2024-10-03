@@ -143,7 +143,7 @@ class SuperAdminController
         if (isset($input['email']) && isset($input['password'])) {
             try {
                 $superAdmin = new SuperAdmin(self::$db->conn);
-                $result = $superAdmin->checkPassword($input['email'], $input['password']);
+                $result = $superAdmin->login($input['email'], $input['password']);
                 if ($result) {
                     self::sendResponse(200, [
                         "message" => "Login successful",

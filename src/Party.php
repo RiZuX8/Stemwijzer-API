@@ -20,7 +20,19 @@ class Party
         $query = "SELECT * FROM " . $this->table;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $parties = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($parties) {
+            return [
+                'status' => 200,
+                'data' => $parties
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'No parties found'
+            ];
+        }
     }
 
     public function getById($id)
@@ -29,7 +41,19 @@ class Party
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id", $id);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $party = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($party) {
+            return [
+                'status' => 200,
+                'data' => $party
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'Party not found'
+            ];
+        }
     }
 
     public function add()
@@ -47,9 +71,16 @@ class Party
 
         if ($stmt->execute()) {
             $this->partyID = $this->conn->lastInsertId();
-            return true;
+            return [
+                'status' => 201,
+                'message' => 'Party created',
+                'id' => $this->partyID
+            ];
         }
-        return false;
+        return [
+            'status' => 500,
+            'message' => 'Failed to create party'
+        ];
     }
 
     public function update()
@@ -68,9 +99,15 @@ class Party
         $stmt->bindParam(":image", $this->image);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 200,
+                'message' => 'Party updated'
+            ];
         }
-        return false;
+        return [
+            'status' => 404,
+            'message' => 'Party not found or not updated'
+        ];
     }
 
     public function delete($id)
@@ -80,8 +117,14 @@ class Party
         $stmt->bindParam(":id", $id);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 204,
+                'message' => 'Party deleted'
+            ];
         }
-        return false;
+        return [
+            'status' => 404,
+            'message' => 'Party not found'
+        ];
     }
 }

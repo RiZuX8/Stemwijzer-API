@@ -20,7 +20,19 @@ class Admin
         $query = "SELECT * FROM " . $this->table;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $admins = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($admins) {
+            return [
+                'status' => 200,
+                'data' => $admins
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'No admins found'
+            ];
+        }
     }
 
     public function getById($id)
@@ -29,7 +41,19 @@ class Admin
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id", $id);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($admin) {
+            return [
+                'status' => 200,
+                'data' => $admin
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'Admin not found'
+            ];
+        }
     }
 
     public function add()
@@ -37,21 +61,26 @@ class Admin
         $query = "INSERT INTO " . $this->table . " (partyID, email, password) VALUES (:partyID, :email, :password)";
         $stmt = $this->conn->prepare($query);
 
-        // Sanitize inputs
         $this->partyID = htmlspecialchars(strip_tags($this->partyID));
         $this->email = htmlspecialchars(strip_tags($this->email));
-        $this->password = password_hash($this->password, PASSWORD_DEFAULT); // Hash the password
+        $this->password = password_hash($this->password, PASSWORD_DEFAULT);
 
-        // Bind parameters
         $stmt->bindParam(":partyID", $this->partyID);
         $stmt->bindParam(":email", $this->email);
         $stmt->bindParam(":password", $this->password);
 
         if ($stmt->execute()) {
             $this->adminID = $this->conn->lastInsertId();
-            return true;
+            return [
+                'status' => 201,
+                'message' => 'Admin created',
+                'id' => $this->adminID
+            ];
         }
-        return false;
+        return [
+            'status' => 500,
+            'message' => 'Failed to create admin'
+        ];
     }
 
     public function update()
@@ -59,20 +88,24 @@ class Admin
         $query = "UPDATE " . $this->table . " SET partyID = :partyID, email = :email WHERE adminID = :id";
         $stmt = $this->conn->prepare($query);
 
-        // Sanitize inputs
         $this->adminID = htmlspecialchars(strip_tags($this->adminID));
         $this->partyID = htmlspecialchars(strip_tags($this->partyID));
         $this->email = htmlspecialchars(strip_tags($this->email));
 
-        // Bind parameters
         $stmt->bindParam(":id", $this->adminID);
         $stmt->bindParam(":partyID", $this->partyID);
         $stmt->bindParam(":email", $this->email);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 200,
+                'message' => 'Admin updated'
+            ];
         }
-        return false;
+        return [
+            'status' => 404,
+            'message' => 'Admin not found or not updated'
+        ];
     }
 
     public function delete($id)
@@ -82,9 +115,15 @@ class Admin
         $stmt->bindParam(":id", $id);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 204,
+                'message' => 'Admin deleted'
+            ];
         }
-        return false;
+        return [
+            'status' => 404,
+            'message' => 'Admin not found'
+        ];
     }
 
     public function updatePassword($id, $newPassword)
@@ -98,12 +137,18 @@ class Admin
         $stmt->bindParam(":password", $hashedPassword);
 
         if ($stmt->execute()) {
-            return true;
+            return [
+                'status' => 200,
+                'message' => 'Password updated'
+            ];
         }
-        return false;
+        return [
+            'status' => 404,
+            'message' => 'Admin not found or password not updated'
+        ];
     }
 
-    public function checkPassword($email, $password)
+    public function login($email, $password)
     {
         $query = "SELECT * FROM " . $this->table . " WHERE email = :email";
         $stmt = $this->conn->prepare($query);
@@ -113,9 +158,20 @@ class Admin
         $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($admin && password_verify($password, $admin['password'])) {
-            return $admin;
+            return [
+                'status' => 200,
+                'message' => 'Login successful',
+                'admin' => [
+                    'id' => $admin['adminID'],
+                    'email' => $admin['email'],
+                    'partyID' => $admin['partyID']
+                ]
+            ];
         }
 
-        return false;
+        return [
+            'status' => 401,
+            'message' => 'Invalid credentials'
+        ];
     }
 }
