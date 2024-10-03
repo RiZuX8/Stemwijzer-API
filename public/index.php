@@ -23,7 +23,7 @@ if ($controller === 'statements') {
 } else if ($controller === 'admins') {
     require_once '../src/AdminController.php';
     AdminController::handleRequest($method, $pathParts);
-} else if ($controller === 'superAdmins') {
+} else if ($controller === 'superadmins') {
     require_once '../src/SuperAdminController.php';
     SuperAdminController::handleRequest($method, $pathParts);
 
