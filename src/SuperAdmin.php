@@ -55,6 +55,27 @@ class SuperAdmin
         }
     }
 
+    public function getByEmail($email)
+    {
+        $query = "SELECT superAdminID, email FROM " . $this->table . " WHERE email = :email";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":email", $email);
+        $stmt->execute();
+        $superAdmin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($superAdmin) {
+            return [
+                'status' => 200,
+                'data' => $superAdmin
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'SuperAdmin not found'
+            ];
+        }
+    }
+
     public function add()
     {
         $query = "INSERT INTO " . $this->table . " (email, password) VALUES (:email, :password)";

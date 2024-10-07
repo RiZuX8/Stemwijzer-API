@@ -18,8 +18,10 @@ class AdminController
         if ($pathParts[0] === 'admins') {
             switch ($method) {
                 case 'GET':
-                    if (isset($pathParts[1])) {
-                        self::getAdmin($pathParts[1]);
+                    if ($pathParts[1] === 'id') {
+                        self::getAdminById($pathParts[2]);
+                    } else if ($pathParts[1] === 'email') {
+                        self::getAdminByEmail($pathParts[2]);
                     } else {
                         self::getAllAdmins();
                     }
@@ -61,11 +63,26 @@ class AdminController
         }
     }
 
-    private static function getAdmin($id)
+    private static function getAdminById($id)
     {
         try {
             $admin = new Admin(self::$db->conn);
             $result = $admin->getById($id);
+            if ($result) {
+                self::sendResponse(200, $result);
+            } else {
+                self::sendResponse(404, ["message" => "Admin not found"]);
+            }
+        } catch (PDOException $e) {
+            self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
+        }
+    }
+
+    private static function getAdminByEmail($email)
+    {
+        try {
+            $admin = new Admin(self::$db->conn);
+            $result = $admin->getByEmail($email);
             if ($result) {
                 self::sendResponse(200, $result);
             } else {
