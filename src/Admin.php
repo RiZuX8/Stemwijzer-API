@@ -56,6 +56,27 @@ class Admin
         }
     }
 
+    public function getByEmail($email)
+    {
+        $query = "SELECT * FROM " . $this->table . " WHERE email = :email";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":email", $email);
+        $stmt->execute();
+        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($admin) {
+            return [
+                'status' => 200,
+                'data' => $admin
+            ];
+        } else {
+            return [
+                'status' => 404,
+                'message' => 'Admin not found'
+            ];
+        }
+    }
+
     public function add()
     {
         $query = "INSERT INTO " . $this->table . " (partyID, email, password) VALUES (:partyID, :email, :password)";

@@ -23,7 +23,8 @@ DELETE /party-statements/{id} | Verwijder een partij-uitspraak.
 
 Admin
 GET /admins | Haal alle admins op.
-GET /admins/{id} | Haal een specifieke admin op.
+GET /admins/id/{id} | Haal een specifieke admin op via id.
+GET /admins/email/{email} | Haal een specifieke admin op via email.
 POST /admins | Voeg een nieuwe admin toe.
 POST /admins/login | Log in als admin.
 PUT /admins/{id} | Werk een bestaande admin bij.
@@ -31,7 +32,8 @@ DELETE /admins/{id} | Verwijder een admin.
 
 SuperAdmin
 GET /superadmins | Haal alle superadmins op.
-GET /superadmins/{id} | Haal een specifieke superadmin op.
+GET /superadmins/id/{id} | Haal een specifieke superadmin op via id.
+GET /superadmins/email/{email} | Haal een specifieke superadmin op via email.
 POST /superadmins | Voeg een nieuwe superadmin toe.
 POST /superadmins/login | Log in als superadmin.
 PUT /superadmins/{id} | Werk een bestaande superadmin bij.

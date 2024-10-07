@@ -18,8 +18,10 @@ class SuperAdminController
         if ($pathParts[0] === 'superadmins') {
             switch ($method) {
                 case 'GET':
-                    if (isset($pathParts[1])) {
-                        self::getSuperAdmin($pathParts[1]);
+                    if ($pathParts[1] === 'id') {
+                        self::getSuperAdminById($pathParts[2]);
+                    } else if ($pathParts[1] === 'email') {
+                        self::getSuperAdminByEmail($pathParts[2]);
                     } else {
                         self::getAllSuperAdmins();
                     }
@@ -61,11 +63,26 @@ class SuperAdminController
         }
     }
 
-    private static function getSuperAdmin($id)
+    private static function getSuperAdminById($id)
     {
         try {
             $superAdmin = new SuperAdmin(self::$db->conn);
             $result = $superAdmin->getById($id);
+            if ($result) {
+                self::sendResponse(200, $result);
+            } else {
+                self::sendResponse(404, ["message" => "SuperAdmin not found"]);
+            }
+        } catch (PDOException $e) {
+            self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
+        }
+    }
+
+    private function getSuperAdminByEmail($email)
+    {
+        try {
+            $superAdmin = new SuperAdmin(self::$db->conn);
+            $result = $superAdmin->getByEmail($email);
             if ($result) {
                 self::sendResponse(200, $result);
             } else {
