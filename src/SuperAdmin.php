@@ -113,14 +113,21 @@ class SuperAdmin
         $stmt->bindParam(":email", $this->email);
 
         if ($stmt->execute()) {
-            return [
-                'status' => 200,
-                'message' => 'SuperAdmin updated'
-            ];
+            if ($stmt->rowCount() > 0) {
+                return [
+                    'status' => 200,
+                    'message' => 'SuperAdmin updated'
+                ];
+            } else {
+                return [
+                    'status' => 404,
+                    'message' => 'SuperAdmin not found or no changes made'
+                ];
+            }
         }
         return [
-            'status' => 404,
-            'message' => 'SuperAdmin not found or not updated'
+            'status' => 500,
+            'message' => 'Failed to update SuperAdmin'
         ];
     }
 
@@ -131,14 +138,21 @@ class SuperAdmin
         $stmt->bindParam(":id", $id);
 
         if ($stmt->execute()) {
-            return [
-                'status' => 204,
-                'message' => 'SuperAdmin deleted'
-            ];
+            if ($stmt->rowCount() > 0) {
+                return [
+                    'status' => 204,
+                    'message' => 'SuperAdmin deleted'
+                ];
+            } else {
+                return [
+                    'status' => 404,
+                    'message' => 'SuperAdmin not found'
+                ];
+            }
         }
         return [
-            'status' => 404,
-            'message' => 'SuperAdmin not found'
+            'status' => 500,
+            'message' => 'Failed to delete SuperAdmin'
         ];
     }
 
@@ -153,14 +167,21 @@ class SuperAdmin
         $stmt->bindParam(":password", $hashedPassword);
 
         if ($stmt->execute()) {
-            return [
-                'status' => 200,
-                'message' => 'Password updated'
-            ];
+            if ($stmt->rowCount() > 0) {
+                return [
+                    'status' => 200,
+                    'message' => 'Password updated'
+                ];
+            } else {
+                return [
+                    'status' => 404,
+                    'message' => 'SuperAdmin not found or no changes made'
+                ];
+            }
         }
         return [
-            'status' => 404,
-            'message' => 'SuperAdmin not found or password not updated'
+            'status' => 500,
+            'message' => 'Failed to update password'
         ];
     }
 

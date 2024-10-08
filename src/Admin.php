@@ -118,14 +118,21 @@ class Admin
         $stmt->bindParam(":email", $this->email);
 
         if ($stmt->execute()) {
-            return [
-                'status' => 200,
-                'message' => 'Admin updated'
-            ];
+            if ($stmt->rowCount() > 0) {
+                return [
+                    'status' => 200,
+                    'message' => 'Admin updated'
+                ];
+            } else {
+                return [
+                    'status' => 404,
+                    'message' => 'Admin not found or no changes made'
+                ];
+            }
         }
         return [
-            'status' => 404,
-            'message' => 'Admin not found or not updated'
+            'status' => 500,
+            'message' => 'Failed to update admin'
         ];
     }
 
@@ -136,14 +143,21 @@ class Admin
         $stmt->bindParam(":id", $id);
 
         if ($stmt->execute()) {
-            return [
-                'status' => 204,
-                'message' => 'Admin deleted'
-            ];
+            if ($stmt->rowCount() > 0) {
+                return [
+                    'status' => 204,
+                    'message' => 'Admin deleted'
+                ];
+            } else {
+                return [
+                    'status' => 404,
+                    'message' => 'Admin not found'
+                ];
+            }
         }
         return [
-            'status' => 404,
-            'message' => 'Admin not found'
+            'status' => 500,
+            'message' => 'Failed to delete admin'
         ];
     }
 
@@ -158,14 +172,21 @@ class Admin
         $stmt->bindParam(":password", $hashedPassword);
 
         if ($stmt->execute()) {
-            return [
-                'status' => 200,
-                'message' => 'Password updated'
-            ];
+            if ($stmt->rowCount() > 0) {
+                return [
+                    'status' => 200,
+                    'message' => 'Password updated'
+                ];
+            } else {
+                return [
+                    'status' => 404,
+                    'message' => 'Admin not found or no changes made'
+                ];
+            }
         }
         return [
-            'status' => 404,
-            'message' => 'Admin not found or password not updated'
+            'status' => 500,
+            'message' => 'Failed to update password'
         ];
     }
 

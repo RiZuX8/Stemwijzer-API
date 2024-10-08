@@ -50,8 +50,12 @@ class StatementController
     {
         try {
             $statement = new Statement(self::$db->conn);
-            $statements = $statement->getAll();
-            self::sendResponse(200, $statements);
+            $result = $statement->getAll();
+            if ($result['status'] === 200) {
+                self::sendResponse($result['status'], $result['data']);
+            } else {
+                self::sendResponse($result['status'], ["message" => $result['message']]);
+            }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
         }
@@ -62,10 +66,10 @@ class StatementController
         try {
             $statement = new Statement(self::$db->conn);
             $result = $statement->getById($id);
-            if ($result) {
-                self::sendResponse(200, $result);
+            if ($result['status'] === 200) {
+                self::sendResponse($result['status'], $result['data']);
             } else {
-                self::sendResponse(404, ["message" => "Statement not found"]);
+                self::sendResponse($result['status'], ["message" => $result['message']]);
             }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
@@ -84,13 +88,14 @@ class StatementController
                 $statement->yValue = $input['yValue'];
                 $statement->priority = $input['priority'];
 
-                if ($statement->add()) {
+                $result = $statement->add();
+                if ($result['status'] === 201) {
                     self::sendResponse(201, [
                         "message" => "Statement created",
                         "id" => $statement->statementID
                     ]);
                 } else {
-                    self::sendResponse(500, ["message" => "Failed to create statement"]);
+                    self::sendResponse($result['status'], ["message" => $result['message']]);
                 }
             } catch (PDOException $e) {
                 self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
@@ -113,10 +118,9 @@ class StatementController
                 $statement->yValue = $input['yValue'];
                 $statement->priority = $input['priority'];
 
-                if ($statement->update()) {
-                    self::sendResponse(200, ["message" => "Statement updated"]);
-                } else {
-                    self::sendResponse(404, ["message" => "Statement not found or not updated"]);
+                $result = $statement->update();
+                if ($result) {
+                    self::sendResponse($result['status'], ["message" => $result['message']]);
                 }
             } catch (PDOException $e) {
                 self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
@@ -130,10 +134,11 @@ class StatementController
     {
         try {
             $statement = new Statement(self::$db->conn);
-            if ($statement->delete($id)) {
-                self::sendResponse(204, null); // 204 means "No Content"
+            $result = $statement->delete($id);
+            if ($result['status'] === 204) {
+                self::sendResponse($result['status'], null); // 204 means "No Content"
             } else {
-                self::sendResponse(404, ["message" => "Statement not found"]);
+                self::sendResponse($result['status'], ["message" => $result['message']]);
             }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);

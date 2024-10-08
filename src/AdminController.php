@@ -56,8 +56,12 @@ class AdminController
     {
         try {
             $admin = new Admin(self::$db->conn);
-            $admins = $admin->getAll();
-            self::sendResponse(200, $admins);
+            $result = $admin->getAll();
+            if ($result['status'] === 200) {
+                self::sendResponse($result['status'], $result['data']);
+            } else {
+                self::sendResponse($result['status'], ["message" => $result['message']]);
+            }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
         }
@@ -68,10 +72,10 @@ class AdminController
         try {
             $admin = new Admin(self::$db->conn);
             $result = $admin->getById($id);
-            if ($result) {
-                self::sendResponse(200, $result);
+            if ($result['status'] === 200) {
+                self::sendResponse($result['status'], $result['data']);
             } else {
-                self::sendResponse(404, ["message" => "Admin not found"]);
+                self::sendResponse($result['status'], ["message" => $result['message']]);
             }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
@@ -83,10 +87,10 @@ class AdminController
         try {
             $admin = new Admin(self::$db->conn);
             $result = $admin->getByEmail($email);
-            if ($result) {
-                self::sendResponse(200, $result);
+            if ($result['status'] === 200) {
+                self::sendResponse($result['status'], $result['data']);
             } else {
-                self::sendResponse(404, ["message" => "Admin not found"]);
+                self::sendResponse($result['status'], ["message" => $result['message']]);
             }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
@@ -103,7 +107,7 @@ class AdminController
                 $admin->email = $input['email'];
                 $admin->password = $input['password'];
 
-                if ($admin->add()) {
+                if ($admin->add()['status'] === 201) {
                     self::sendResponse(201, [
                         "message" => "Admin created",
                         "id" => $admin->adminID
@@ -129,10 +133,9 @@ class AdminController
                 $admin->partyID = $input['partyID'];
                 $admin->email = $input['email'];
 
-                if ($admin->update()) {
-                    self::sendResponse(200, ["message" => "Admin updated"]);
-                } else {
-                    self::sendResponse(404, ["message" => "Admin not found or not updated"]);
+                $result = $admin->$admin->update();
+                if ($result) {
+                    self::sendResponse($result['status'], ["message" => $result['message']]);
                 }
             } catch (PDOException $e) {
                 self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
@@ -146,8 +149,9 @@ class AdminController
     {
         try {
             $admin = new Admin(self::$db->conn);
-            if ($admin->delete($id)) {
-                self::sendResponse(204, null); // 204 means "No Content"
+            $result = $admin->delete($id);
+            if ($result['status'] === 204) {
+                self::sendResponse($result['status'], null); // 204 means "No Content"
             } else {
                 self::sendResponse(404, ["message" => "Admin not found"]);
             }
@@ -163,7 +167,7 @@ class AdminController
             try {
                 $admin = new Admin(self::$db->conn);
                 $result = $admin->login($input['email'], $input['password']);
-                if ($result) {
+                if ($result['status'] === 200) {
                     self::sendResponse($result['status'], [
                         "message" => $result['message'],
                         "admin" => [

@@ -50,8 +50,12 @@ class PartyController
     {
         try {
             $party = new Party(self::$db->conn);
-            $parties = $party->getAll();
-            self::sendResponse(200, $parties);
+            $result = $party->getAll();
+            if ($result['status'] === 200) {
+                self::sendResponse($result['status'], $result['data']);
+            } else {
+                self::sendResponse($result['status'], ["message" => $result['message']]);
+            }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
         }
@@ -62,10 +66,10 @@ class PartyController
         try {
             $party = new Party(self::$db->conn);
             $result = $party->getById($id);
-            if ($result) {
-                self::sendResponse(200, $result);
+            if ($result['status'] === 200) {
+                self::sendResponse($result['status'], $result['data']);
             } else {
-                self::sendResponse(404, ["message" => "Party not found"]);
+                self::sendResponse($result['status'], ["message" => $result['message']]);
             }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
@@ -82,7 +86,8 @@ class PartyController
                 $party->description = $input['description'];
                 $party->image = $input['image'];
 
-                if ($party->add()) {
+                $result = $party->add();
+                if ($result['status'] === 201) {
                     self::sendResponse(201, [
                         "message" => "Party created",
                         "id" => $party->partyID
@@ -109,10 +114,9 @@ class PartyController
                 $party->description = $input['description'];
                 $party->image = $input['image'];
 
-                if ($party->update()) {
-                    self::sendResponse(200, ["message" => "Party updated"]);
-                } else {
-                    self::sendResponse(404, ["message" => "Party not found or not updated"]);
+                $result = $party->update();
+                if ($result) {
+                    self::sendResponse($result['status'], ["message" => $result['message']]);
                 }
             } catch (PDOException $e) {
                 self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
@@ -126,10 +130,11 @@ class PartyController
     {
         try {
             $party = new Party(self::$db->conn);
-            if ($party->delete($id)) {
-                self::sendResponse(204, null); // 204 means "No Content"
+            $result = $party->getById($id);
+            if ($result['status'] === 204) {
+                self::sendResponse($result['status'], null); // 204 means "No Content"
             } else {
-                self::sendResponse(404, ["message" => "Party not found"]);
+                self::sendResponse($result['status'], ["message" => $result['message']]);
             }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);

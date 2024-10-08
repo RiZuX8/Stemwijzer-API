@@ -56,8 +56,12 @@ class SuperAdminController
     {
         try {
             $superAdmin = new SuperAdmin(self::$db->conn);
-            $superAdmins = $superAdmin->getAll();
-            self::sendResponse(200, $superAdmins);
+            $result = $superAdmin->getAll();
+            if ($result['status'] === 200) {
+                self::sendResponse(200, $result);
+            } else {
+                self::sendResponse($result['status'], ["message" => $result['message']]);
+            }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
         }
@@ -68,10 +72,10 @@ class SuperAdminController
         try {
             $superAdmin = new SuperAdmin(self::$db->conn);
             $result = $superAdmin->getById($id);
-            if ($result) {
+            if ($result['status'] === 200) {
                 self::sendResponse(200, $result);
             } else {
-                self::sendResponse(404, ["message" => "SuperAdmin not found"]);
+                self::sendResponse($result['status'], ["message" => $result['message']]);
             }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
@@ -83,10 +87,10 @@ class SuperAdminController
         try {
             $superAdmin = new SuperAdmin(self::$db->conn);
             $result = $superAdmin->getByEmail($email);
-            if ($result) {
+            if ($result['status'] === 200) {
                 self::sendResponse(200, $result);
             } else {
-                self::sendResponse(404, ["message" => "SuperAdmin not found"]);
+                self::sendResponse($result['status'], ["message" => $result['message']]);
             }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
@@ -102,7 +106,7 @@ class SuperAdminController
                 $superAdmin->email = $input['email'];
                 $superAdmin->password = $input['password'];
 
-                if ($superAdmin->add()) {
+                if ($superAdmin->add()['status'] === 201) {
                     self::sendResponse(201, [
                         "message" => "SuperAdmin created",
                         "id" => $superAdmin->superAdminID
@@ -126,11 +130,10 @@ class SuperAdminController
                 $superAdmin = new SuperAdmin(self::$db->conn);
                 $superAdmin->superAdminID = $id;
                 $superAdmin->email = $input['email'];
+                $result = $superAdmin->update();
 
-                if ($superAdmin->update()) {
-                    self::sendResponse(200, ["message" => "SuperAdmin updated"]);
-                } else {
-                    self::sendResponse(404, ["message" => "SuperAdmin not found or not updated"]);
+                if ($result) {
+                    self::sendResponse($result['status'], ["message" => $result['message']]);
                 }
             } catch (PDOException $e) {
                 self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
@@ -144,8 +147,9 @@ class SuperAdminController
     {
         try {
             $superAdmin = new SuperAdmin(self::$db->conn);
-            if ($superAdmin->delete($id)) {
-                self::sendResponse(204, null); // 204 means "No Content"
+            $result = $superAdmin->delete($id);
+            if ($result['status'] === 204) {
+                self::sendResponse($result['status'], null); // 204 means "No Content"
             } else {
                 self::sendResponse(404, ["message" => "SuperAdmin not found"]);
             }
@@ -161,7 +165,7 @@ class SuperAdminController
             try {
                 $superAdmin = new SuperAdmin(self::$db->conn);
                 $result = $superAdmin->login($input['email'], $input['password']);
-                if ($result) {
+                if ($result['status'] === 200) {
                     self::sendResponse($result['status'], [
                         "message" => $result['message'],
                         "superAdmin" => [

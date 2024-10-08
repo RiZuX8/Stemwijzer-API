@@ -48,8 +48,12 @@ class PartyStatementController
     {
         try {
             $partyStatement = new PartyStatement(self::$db->conn);
-            $partyStatements = $partyStatement->getAll();
-            self::sendResponse(200, $partyStatements);
+            $result = $partyStatement->getAll();
+            if ($result['status'] === 200) {
+                self::sendResponse($result['status'], $result['data']);
+            } else {
+                self::sendResponse($result['status'], ["message" => $result['message']]);
+            }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
         }
@@ -59,8 +63,12 @@ class PartyStatementController
     {
         try {
             $partyStatement = new PartyStatement(self::$db->conn);
-            $results = $partyStatement->getBypartyID($partyID);
-            self::sendResponse(200, $results);
+            $result = $partyStatement->getByPartyId($partyID);
+            if ($result['status'] === 200) {
+                self::sendResponse($result['status'], $result['data']);
+            } else {
+                self::sendResponse($result['status'], ["message" => $result['message']]);
+            }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
         }
@@ -70,8 +78,12 @@ class PartyStatementController
     {
         try {
             $partyStatement = new PartyStatement(self::$db->conn);
-            $results = $partyStatement->getByStatementId($statementId);
-            self::sendResponse(200, $results);
+            $result = $partyStatement->getByStatementId($statementId);
+            if ($result['status'] === 200) {
+                self::sendResponse($result['status'], $result['data']);
+            } else {
+                self::sendResponse($result['status'], ["message" => $result['message']]);
+            }
         } catch (PDOException $e) {
             self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
         }
@@ -88,10 +100,9 @@ class PartyStatementController
                 $partyStatement->statementID = $input['statementID'];
                 $partyStatement->answerValue = $input['answerValue'];
 
-                if ($partyStatement->add()) {
-                    self::sendResponse(201, ["message" => "PartyStatement created"]);
-                } else {
-                    self::sendResponse(500, ["message" => "Failed to create PartyStatement"]);
+                $result = $partyStatement->add();
+                if ($result) {
+                    self::sendResponse($result['status'], ["message" => $result['message']]);
                 }
             } catch (PDOException $e) {
                 self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
@@ -111,8 +122,9 @@ class PartyStatementController
                 $partyStatement->statementID = $input['statementID'];
                 $partyStatement->answerValue = $input['answerValue'];
 
-                if ($partyStatement->update()) {
-                    self::sendResponse(200, ["message" => "PartyStatement updated"]);
+                $result = $partyStatement->update();
+                if ($result['status'] === 200) {
+                    self::sendResponse($result['status'], ["message" => $result['message']]);
                 } else {
                     self::sendResponse(404, ["message" => "PartyStatement not found or not updated"]);
                 }
@@ -133,10 +145,11 @@ class PartyStatementController
                 $partyStatement->partyID = $input['partyID'];
                 $partyStatement->statementID = $input['statementID'];
 
-                if ($partyStatement->delete()) {
-                    self::sendResponse(204, null); // 204 means "No Content"
+                $result = $partyStatement->delete();
+                if ($result['status'] === 204) {
+                    self::sendResponse($result['status'], null); // 204 means "No Content"
                 } else {
-                    self::sendResponse(404, ["message" => "PartyStatement not found"]);
+                    self::sendResponse($result['status'], ["message" => $result['message']]);
                 }
             } catch (PDOException $e) {
                 self::sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
