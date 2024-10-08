@@ -117,14 +117,21 @@ class Statement
         $stmt->bindParam(":priority", $this->priority);
 
         if ($stmt->execute()) {
-            return [
-                'status' => 200,
-                'message' => 'Statement updated'
-            ];
+            if ($stmt->rowCount() > 0) {
+                return [
+                    'status' => 200,
+                    'message' => 'Statement updated'
+                ];
+            } else {
+                return [
+                    'status' => 404,
+                    'message' => 'Statement not found'
+                ];
+            }
         }
         return [
-            'status' => 404,
-            'message' => 'Statement not found or not updated'
+            'status' => 500,
+            'message' => 'Failed to update statement'
         ];
     }
 
@@ -135,14 +142,21 @@ class Statement
         $stmt->bindParam(":id", $id);
 
         if ($stmt->execute()) {
-            return [
-                'status' => 204,
-                'message' => 'Statement deleted'
-            ];
+            if ($stmt->rowCount() > 0) {
+                return [
+                    'status' => 204,
+                    'message' => 'Statement deleted'
+                ];
+            } else {
+                return [
+                    'status' => 404,
+                    'message' => 'Statement not found'
+                ];
+            }
         }
         return [
-            'status' => 404,
-            'message' => 'Statement not found'
+            'status' => 500,
+            'message' => 'Failed to delete statement'
         ];
     }
 }

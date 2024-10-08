@@ -29,7 +29,7 @@ class PartyStatement
         } else {
             return [
                 'status' => 404,
-                'message' => 'PartyStatements not found'
+                'message' => 'No party statements found'
             ];
         }
     }
@@ -50,7 +50,7 @@ class PartyStatement
         } else {
             return [
                 'status' => 404,
-                'message' => 'PartyStatements not found'
+                'message' => 'No party statements found for this party'
             ];
         }
     }
@@ -71,7 +71,7 @@ class PartyStatement
         } else {
             return [
                 'status' => 404,
-                'message' => 'PartyStatements not found'
+                'message' => 'No party statements found for this statement'
             ];
         }
     }
@@ -92,12 +92,12 @@ class PartyStatement
         if ($stmt->execute()) {
             return [
                 'status' => 201,
-                'message' => 'PartyStatement created'
+                'message' => 'Party statement created'
             ];
         }
         return [
             'status' => 500,
-            'message' => 'Failed to create PartyStatement'
+            'message' => 'Failed to create party statement'
         ];
     }
 
@@ -115,14 +115,21 @@ class PartyStatement
         $stmt->bindParam(":answerValue", $this->answerValue);
 
         if ($stmt->execute()) {
-            return [
-                'status' => 200,
-                'message' => 'PartyStatement updated'
-            ];
+            if ($stmt->rowCount() > 0) {
+                return [
+                    'status' => 200,
+                    'message' => 'Party statement updated'
+                ];
+            } else {
+                return [
+                    'status' => 404,
+                    'message' => 'Party statement not found'
+                ];
+            }
         }
         return [
-            'status' => 404,
-            'message' => 'PartyStatement not found or not updated'
+            'status' => 500,
+            'message' => 'Failed to update party statement'
         ];
     }
 
@@ -138,14 +145,21 @@ class PartyStatement
         $stmt->bindParam(":statementID", $this->statementID);
 
         if ($stmt->execute()) {
-            return [
-                'status' => 204,
-                'message' => 'PartyStatement deleted'
-            ];
+            if ($stmt->rowCount() > 0) {
+                return [
+                    'status' => 204,
+                    'message' => 'Party statement deleted'
+                ];
+            } else {
+                return [
+                    'status' => 404,
+                    'message' => 'Party statement not found'
+                ];
+            }
         }
         return [
-            'status' => 404,
-            'message' => 'PartyStatement not found'
+            'status' => 500,
+            'message' => 'Failed to delete party statement'
         ];
     }
 }

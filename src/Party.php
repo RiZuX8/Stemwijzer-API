@@ -99,14 +99,21 @@ class Party
         $stmt->bindParam(":image", $this->image);
 
         if ($stmt->execute()) {
-            return [
-                'status' => 200,
-                'message' => 'Party updated'
-            ];
+            if ($stmt->rowCount() > 0) {
+                return [
+                    'status' => 200,
+                    'message' => 'Party updated'
+                ];
+            } else {
+                return [
+                    'status' => 404,
+                    'message' => 'Party not found or no changes made'
+                ];
+            }
         }
         return [
-            'status' => 404,
-            'message' => 'Party not found or not updated'
+            'status' => 500,
+            'message' => 'Failed to update party'
         ];
     }
 
@@ -117,14 +124,21 @@ class Party
         $stmt->bindParam(":id", $id);
 
         if ($stmt->execute()) {
-            return [
-                'status' => 204,
-                'message' => 'Party deleted'
-            ];
+            if ($stmt->rowCount() > 0) {
+                return [
+                    'status' => 204,
+                    'message' => 'Party deleted'
+                ];
+            } else {
+                return [
+                    'status' => 404,
+                    'message' => 'Party not found'
+                ];
+            }
         }
         return [
-            'status' => 404,
-            'message' => 'Party not found'
+            'status' => 500,
+            'message' => 'Failed to delete party'
         ];
     }
 }
