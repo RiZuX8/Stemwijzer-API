@@ -164,12 +164,12 @@ class AdminController
                 $admin = new Admin(self::$db->conn);
                 $result = $admin->login($input['email'], $input['password']);
                 if ($result) {
-                    self::sendResponse(200, [
-                        "message" => "Login successful",
+                    self::sendResponse($result['status'], [
+                        "message" => $result['message'],
                         "admin" => [
-                            "id" => $result['adminID'],
-                            "email" => $result['email'],
-                            "partyID" => $result['partyID']
+                            "id" => $result['admin']['id'],
+                            "partyID" => $result['admin']['partyID'],
+                            "email" => $result['admin']['email']
                         ]
                     ]);
                 } else {

@@ -184,8 +184,8 @@ class Admin
                 'message' => 'Login successful',
                 'admin' => [
                     'id' => $admin['adminID'],
-                    'email' => $admin['email'],
-                    'partyID' => $admin['partyID']
+                    'partyID' => $admin['partyID'],
+                    'email' => $admin['email']
                 ]
             ];
         }
