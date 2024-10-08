@@ -78,7 +78,7 @@ class SuperAdminController
         }
     }
 
-    private function getSuperAdminByEmail($email)
+    private static function getSuperAdminByEmail($email)
     {
         try {
             $superAdmin = new SuperAdmin(self::$db->conn);
