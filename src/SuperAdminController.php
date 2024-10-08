@@ -162,11 +162,11 @@ class SuperAdminController
                 $superAdmin = new SuperAdmin(self::$db->conn);
                 $result = $superAdmin->login($input['email'], $input['password']);
                 if ($result) {
-                    self::sendResponse(200, [
-                        "message" => "Login successful",
+                    self::sendResponse($result['status'], [
+                        "message" => $result['message'],
                         "superAdmin" => [
-                            "id" => $result['superAdminID'],
-                            "email" => $result['email']
+                            "id" => $result['superAdmin']['id'],
+                            "email" => $result['superAdmin']['email']
                         ]
                     ]);
                 } else {
