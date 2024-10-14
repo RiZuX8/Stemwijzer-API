@@ -18,10 +18,14 @@ class SuperAdminController
         if ($pathParts[0] === 'superadmins') {
             switch ($method) {
                 case 'GET':
-                    if ($pathParts[1] === 'id') {
-                        self::getSuperAdminById($pathParts[2]);
-                    } else if ($pathParts[1] === 'email') {
-                        self::getSuperAdminByEmail($pathParts[2]);
+                    if (isset($pathParts[1])) {
+                        if ($pathParts[1] === 'id') {
+                            self::getSuperAdminById($pathParts[2]);
+                        } else if ($pathParts[1] === 'email') {
+                            self::getSuperAdminByEmail($pathParts[2]);
+                        } else {
+                            self::sendResponse(404, ["message" => "Not Found"]);
+                        }
                     } else {
                         self::getAllSuperAdmins();
                     }

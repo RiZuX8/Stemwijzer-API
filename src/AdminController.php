@@ -18,10 +18,14 @@ class AdminController
         if ($pathParts[0] === 'admins') {
             switch ($method) {
                 case 'GET':
-                    if ($pathParts[1] === 'id') {
-                        self::getAdminById($pathParts[2]);
-                    } else if ($pathParts[1] === 'email') {
-                        self::getAdminByEmail($pathParts[2]);
+                    if (isset($pathParts[1])) {
+                        if ($pathParts[1] === 'id') {
+                            self::getAdminById($pathParts[2]);
+                        } else if ($pathParts[1] === 'email') {
+                            self::getAdminByEmail($pathParts[2]);
+                        } else {
+                            self::sendResponse(404, ["message" => "Not Found"]);
+                        }
                     } else {
                         self::getAllAdmins();
                     }
@@ -133,7 +137,7 @@ class AdminController
                 $admin->partyID = $input['partyID'];
                 $admin->email = $input['email'];
 
-                $result = $admin->$admin->update();
+                $result = $admin->update();
                 if ($result) {
                     self::sendResponse($result['status'], ["message" => $result['message']]);
                 }
