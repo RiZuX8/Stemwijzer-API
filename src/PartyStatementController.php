@@ -18,10 +18,14 @@ class PartyStatementController
         if ($pathParts[0] === 'party-statements') {
             switch ($method) {
                 case 'GET':
-                    if (isset($pathParts[1]) && $pathParts[1] === 'party') {
-                        self::getByParty($pathParts[2]);
-                    } elseif (isset($pathParts[1]) && $pathParts[1] === 'statement') {
-                        self::getByStatement($pathParts[2]);
+                    if (isset($pathParts[1])) {
+                        if ($pathParts[1] === 'party') {
+                            self::getByParty($pathParts[2]);
+                        } elseif ($pathParts[1] === 'statement') {
+                            self::getByStatement($pathParts[2]);
+                        } else {
+                            self::sendResponse(404, ["message" => "Not Found"]);
+                        }
                     } else {
                         self::getAllPartyStatements();
                     }
