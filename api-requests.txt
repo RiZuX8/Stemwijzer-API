@@ -14,8 +14,8 @@ DELETE /parties/{id} | Verwijder een partij.
 
 PartyStatement
 GET /party-statements | Haal alle partij-uitspraken op.
-GET /party-statements/party/{partyId} | Haal uitspraken van een specifieke partij op.
-GET /party-statements/statement/{statementId} | Haal uitspraken van een specifiek statement op.
+GET /party-statements/party/{partyID} | Haal uitspraken van een specifieke partij op.
+GET /party-statements/statement/{statementID} | Haal uitspraken van een specifiek statement op.
 POST /party-statements | Voeg een nieuwe partij-uitspraak toe.
 PUT /party-statements | Werk een bestaande partij-uitspraak bij.
 DELETE /party-statements | Verwijder een partij-uitspraak.
