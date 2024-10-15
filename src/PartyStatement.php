@@ -34,7 +34,7 @@ class PartyStatement
         }
     }
 
-    public function getByPartyId($partyID)
+    public function getByPartyID($partyID)
     {
         $query = "SELECT * FROM " . $this->table . " WHERE partyID = :partyID";
         $stmt = $this->conn->prepare($query);
@@ -55,11 +55,11 @@ class PartyStatement
         }
     }
 
-    public function getByStatementId($statementId)
+    public function getByStatementID($statementID)
     {
-        $query = "SELECT * FROM " . $this->table . " WHERE statementID = :statementId";
+        $query = "SELECT * FROM " . $this->table . " WHERE statementID = :statementID";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":statementId", $statementId);
+        $stmt->bindParam(":statementID", $statementID);
         $stmt->execute();
         $partyStatements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

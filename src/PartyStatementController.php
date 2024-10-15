@@ -67,7 +67,7 @@ class PartyStatementController
     {
         try {
             $partyStatement = new PartyStatement(self::$db->conn);
-            $result = $partyStatement->getByPartyId($partyID);
+            $result = $partyStatement->getByPartyID($partyID);
             if ($result['status'] === 200) {
                 self::sendResponse($result['status'], $result['data']);
             } else {
@@ -78,11 +78,11 @@ class PartyStatementController
         }
     }
 
-    private static function getByStatement($statementId)
+    private static function getByStatement($statementID)
     {
         try {
             $partyStatement = new PartyStatement(self::$db->conn);
-            $result = $partyStatement->getByStatementId($statementId);
+            $result = $partyStatement->getByStatementID($statementID);
             if ($result['status'] === 200) {
                 self::sendResponse($result['status'], $result['data']);
             } else {
