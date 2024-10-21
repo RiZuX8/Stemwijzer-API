@@ -19,25 +19,31 @@ foreach ($pathParts as $key => $part) {
 
 $controller = $pathParts[0];
 
-if ($controller === 'statements') {
-    require_once '../src/StatementController.php';
-    StatementController::handleRequest($method, $pathParts);
-} else if ($controller === 'parties') {
-    require_once '../src/PartyController.php';
-    PartyController::handleRequest($method, $pathParts);
-} else if ($controller === 'parties-statements') {
-    require_once '../src/PartyStatementController.php';
-    PartyStatementController::handleRequest($method, $pathParts);
-} else if ($controller === 'admins') {
-    require_once '../src/AdminController.php';
-    AdminController::handleRequest($method, $pathParts);
-} else if ($controller === 'superadmins') {
-    require_once '../src/SuperAdminController.php';
-    SuperAdminController::handleRequest($method, $pathParts);
-
-} else {
-    header("Content-Type: application/json");
-    http_response_code(404);
-    echo json_encode("Not found " . $pathParts[0]);
+switch ($controller) {
+    case 'statements':
+        require_once '../src/StatementController.php';
+        StatementController::handleRequest($method, $pathParts);
+        break;
+    case 'parties':
+        require_once '../src/PartyController.php';
+        PartyController::handleRequest($method, $pathParts);
+        break;
+    case 'parties-statements':
+        require_once '../src/PartyStatementController.php';
+        PartyStatementController::handleRequest($method, $pathParts);
+        break;
+    case 'admins':
+        require_once '../src/AdminController.php';
+        AdminController::handleRequest($method, $pathParts);
+        break;
+    case 'superadmins':
+        require_once '../src/SuperAdminController.php';
+        SuperAdminController::handleRequest($method, $pathParts);
+        break;
+    default:
+        header("Content-Type: application/json");
+        http_response_code(404);
+        echo json_encode("Not found " . $pathParts[0]);
+        break;
 }
 ?>
