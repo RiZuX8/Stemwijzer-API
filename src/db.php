@@ -3,9 +3,9 @@ class db
 {
     public $conn;
     private $host = "ohzoomer.nl";
-    private $db_name = "ohzoomer_school";
-    private $username = "ohzoomer_school";
-    private $password = "u2wohstCY";
+    private $db_name = "lsibm1cbac_stemwijzer";
+    private $username = "lsibm1cbac_stemwijzer";
+    private $password = "5bGjXLxZBMEKbCWFKBX9";
 
     function __construct()
     {
