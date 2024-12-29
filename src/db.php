@@ -2,10 +2,10 @@
 class db
 {
     public $conn;
-    private $host = "ohzoomer.nl";
-    private $db_name = "lsibm1cbac_stemwijzer";
-    private $username = "lsibm1cbac_stemwijzer";
-    private $password = "5bGjXLxZBMEKbCWFKBX9";
+    private $host = "";
+    private $db_name = "";
+    private $username = "";
+    private $password = "";
 
     function __construct()
     {
